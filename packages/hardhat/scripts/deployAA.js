@@ -69,25 +69,25 @@ async function main() {
 
   console.log('deployed', mintDeployTxnHash, newAddress)
 
-  const storageWriteTxnHash = await smartAccountSigner.sendTransaction({
-    from: smartAccountAddress,
-    to: newAddress,
-    data: encodeFunctionData({
-      abi,
-      functionName: 'addMatch',
-      args: ['0x109282750F1030941e81b6c2551E7B1157A24EaB', '0x5c9Ec83A02771C338B22cA59a9097C4a145dBBFA'],
-    }),
-  })
+  // const storageWriteTxnHash = await smartAccountSigner.sendTransaction({
+  //   from: smartAccountAddress,
+  //   to: newAddress,
+  //   data: encodeFunctionData({
+  //     abi,
+  //     functionName: 'addMatch',
+  //     args: ['0x109282750F1030941e81b6c2551E7B1157A24EaB', '0x5c9Ec83A02771C338B22cA59a9097C4a145dBBFA'],
+  //   }),
+  // })
 
-  await publicClient.waitForTransactionReceipt({ hash: storageWriteTxnHash })
-  console.log('stored new value', newValue, storageWriteTxnHash)
+  // await publicClient.waitForTransactionReceipt({ hash: storageWriteTxnHash })
+  // console.log('stored new value', newValue, storageWriteTxnHash)
 
-  const storageReadResult = await publicClient.readContract({
-    address: newAddress,
-    abi,
-    functionName: 'getMatches',
-  })
-  console.log('new storage value', storageReadResult)
+  // const storageReadResult = await publicClient.readContract({
+  //   address: newAddress,
+  //   abi,
+  //   functionName: 'getMatches',
+  // })
+  // console.log('new storage value', storageReadResult)
 }
 
 // We recommend this pattern to be able to use async/await everywhere

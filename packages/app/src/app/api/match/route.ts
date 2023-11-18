@@ -119,7 +119,7 @@ async function makeRandomMatches() {
 }
 
 export async function GET() {
-  await makeRandomMatches()
+  // await makeRandomMatches()
 
   // await makeAttestation(
   //   '0x5c9Ec83A02771C338B22cA59a9097C4a145dBBFA',

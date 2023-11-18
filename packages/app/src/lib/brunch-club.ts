@@ -1,7 +1,7 @@
 import { brunchClubABI } from '@/abis'
 import { RpcTransactionRequest, encodeFunctionData, getAddress } from 'viem'
 
-export const CONTRACT_ADDRESS = '0x824839fc794e1c676Ad9d7F9f540002D1cce75A1'
+export const CONTRACT_ADDRESS = '0x1e35aC1C4E9713EA684F14817B0F7EdA2aa4CE0B'
 
 export function acceptMatch(from: string, address: string): RpcTransactionRequest {
   return {
