@@ -14,8 +14,8 @@ export default defineConfig({
     hardhat({
       project: '../hardhat',
       deployments: {
-        Message: {
-          11155111: '0xcc5a0d6268d70811edad77799f2168afe6382e89',
+        BrunchClub: {
+          84531: '0xebaD9edb196d6139f846623C8fBcd1CC5A48E78e',
         },
       },
     }),

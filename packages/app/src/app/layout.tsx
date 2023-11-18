@@ -3,9 +3,10 @@ import { PropsWithChildren, useEffect, useState } from 'react'
 import { SITE_DESCRIPTION, SITE_NAME } from '@/utils/site'
 import { Layout } from '@/components/Layout'
 import { SmartAccountProvider } from '@/context/Web3'
-import '../assets/globals.css'
+import '../globals.css'
 import { SafeHydrate } from '@/components/safe-hydrate'
 import { PrivyClientProvider } from '@/context/privy';
+import { ReactQueryProvider } from '@/context/react-query'
 
 export const metadata: Metadata = {
   title: SITE_NAME,
@@ -18,11 +19,13 @@ export default function RootLayout(props: PropsWithChildren) {
     <html lang='en'>
       <body>
         <SafeHydrate>
-          <PrivyClientProvider>
-            <SmartAccountProvider>
-              <Layout>{props.children}</Layout>
-            </SmartAccountProvider>
-          </PrivyClientProvider>
+          <ReactQueryProvider >
+            <PrivyClientProvider>
+              <SmartAccountProvider>
+                <Layout>{props.children}</Layout>
+              </SmartAccountProvider>
+            </PrivyClientProvider>
+          </ReactQueryProvider>
         </SafeHydrate>
       </body>
     </html>

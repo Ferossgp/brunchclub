@@ -89,14 +89,13 @@ async function main() {
 
   console.log("deployed", mintDeployTxnHash, newAddress);
 
-  const newValue = 123;
   const storageWriteTxnHash = await smartAccountSigner.sendTransaction({
     from: smartAccountAddress,
     to: newAddress,
     data: encodeFunctionData({
       abi,
-      functionName: "store",
-      args: [newValue],
+      functionName: "addMatch",
+      args: ['0x109282750F1030941e81b6c2551E7B1157A24EaB', '0x5c9Ec83A02771C338B22cA59a9097C4a145dBBFA'],
     }),
   });
 
@@ -106,7 +105,7 @@ async function main() {
   const storageReadResult = await publicClient.readContract({
     address: newAddress,
     abi,
-    functionName: "retrieve",
+    functionName: "getMatches",
   });
   console.log("new storage value", storageReadResult);
 }

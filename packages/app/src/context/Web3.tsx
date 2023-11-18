@@ -15,6 +15,8 @@ import { LightSmartContractAccount, getDefaultLightAccountFactoryAddress } from 
 import { BASE_GOERLI_ALCHEMY_RPC_URL, BASE_GOERLI_ENTRYPOINT_ADDRESS, BASE_GOERLI_PAYMASTER_URL } from './constants'
 import { populateWithPaymaster, signUserOp } from './user-operations'
 import { CONSTANTS, PushAPI, viemSignerType } from '@pushprotocol/restapi'
+import { contractRegister } from '@/lib/brunch-club'
+import { useLocalStorage } from 'usehooks-ts'
 
 /** Interface returned by custom `useSmartAccount` hook */
 interface SmartAccountInterface {
@@ -123,6 +125,7 @@ export const SmartAccountProvider = ({ children }: { children: React.ReactNode }
       // Store the address as state so we don't need to make async calls
       // later to get it :)
       const address = await provider.getAddress()
+
       setSmartAccountAddress(address)
       setSmartAccountReady(true)
     }
@@ -149,6 +152,22 @@ export const SmartAccountProvider = ({ children }: { children: React.ReactNode }
     return userOpHash
   }
 
+  const [isRegistered, setRegistered] = useLocalStorage('registered', false)
+
+  useEffect(() => {
+    console.log('useEffect', isRegistered, smartAccountAddress, eoaClient?.account)
+    if (isRegistered || smartAccountAddress == null || eoaClient?.account == null) return
+
+    const req = contractRegister(smartAccountAddress, eoaClient.account!.address)
+
+    // TODO: Call only once
+    sendSponsoredUserOperation(req).then((resp) => {
+      console.log('contractRegister', resp)
+      setRegistered(true)
+    })
+  }, [isRegistered, smartAccountAddress, eoaClient])
+
+
   return (
     <SmartAccountContext.Provider
       value={{
@@ -157,6 +176,7 @@ export const SmartAccountProvider = ({ children }: { children: React.ReactNode }
         smartAccountSigner: smartAccountSigner,
         smartAccountAddress: smartAccountAddress,
         sendSponsoredUserOperation: sendSponsoredUserOperation,
+        paymaster: paymaster,
         eoa: eoa,
         eoaClient: eoaClient,
       }}>

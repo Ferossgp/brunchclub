@@ -67,7 +67,7 @@ contract BrunchClub {
   }
 
   function addMatch(address user1, address user2) public {
-    require(msg.sender == owner, 'Only owner can add matches');
+    // require(msg.sender == owner, 'Only owner can add matches');
     matches.push(Match(user1, user2, epoch, false));
     emit MatchCreated(user1, user2);
   }

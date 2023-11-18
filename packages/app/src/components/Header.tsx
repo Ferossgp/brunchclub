@@ -10,6 +10,9 @@ export function Header() {
         <h1 className='text-lg font-bold'>{SITE_NAME}</h1>
       </LinkComponent>
 
+      <LinkComponent href='/profile'>
+        <h1 className='text-lg font-bold'>Profile</h1>
+      </LinkComponent>
       <Connect />
     </header>
   )
