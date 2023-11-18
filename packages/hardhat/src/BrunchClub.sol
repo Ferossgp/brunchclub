@@ -32,6 +32,7 @@ contract BrunchClub {
   struct User {
     address user;
     address eoa;
+    string avatar;
     string name;
     string description;
     string[] objectives;
@@ -161,7 +162,7 @@ contract BrunchClub {
   function register(address eoa) public {
     require(users[msg.sender].user == address(0), 'User already registered');
     string[] memory empty;
-    users[msg.sender] = User(msg.sender, eoa, '', '', empty, empty, 0);
+    users[msg.sender] = User(msg.sender, eoa, '', '', '', empty, empty, 0);
     allUsers.push(msg.sender);
     emit NewUser(msg.sender);
   }
@@ -176,6 +177,12 @@ contract BrunchClub {
     require(users[msg.sender].user != address(0), 'User not registered');
 
     users[msg.sender].name = name;
+  }
+
+  function updateAvatar(string calldata ipfs) public {
+    require(users[msg.sender].user != address(0), 'User not registered');
+
+    users[msg.sender].avatar = ipfs;
   }
 
   function updateObjectives(string[] calldata _objectives) public {

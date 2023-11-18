@@ -7,6 +7,7 @@ import { CONTRACT_ADDRESS } from '@/lib/brunch-club'
 import { brunchClubABI } from '@/abis'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { LinkComponent } from '@/components/LinkComponent'
+import { ipfsURL } from '@/lib/utils'
 
 export default function Home() {
   const { smartAccountAddress } = useSmartAccount()
@@ -66,6 +67,7 @@ export default function Home() {
 
 const RenderProfile: React.FC<{
   profile: {
+    avatar?: string
     user: string
     name: string
     description: string
@@ -78,7 +80,7 @@ const RenderProfile: React.FC<{
     <LinkComponent href={`/chat/${profile.user}`}>
       <div className='card card-compact w-96 bg-base-100 shadow-md border pt-4 items-center'>
         <Avatar>
-          {profile.user != null ? <AvatarImage src={`https://i.pravatar.cc/250?u=${profile.user}`} /> : null}
+          {profile.avatar != null ? <AvatarImage src={ipfsURL(profile.avatar)} /> : null}
           <AvatarFallback>🥑</AvatarFallback>
         </Avatar>
         <div className='card-body'>

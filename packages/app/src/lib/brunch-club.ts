@@ -1,7 +1,7 @@
 import { brunchClubABI } from '@/abis'
 import { RpcTransactionRequest, encodeFunctionData, getAddress } from 'viem'
 
-export const CONTRACT_ADDRESS = '0x4722DB35Bd0795E96EC6ff2D65Ea4B4BE258B45b'
+export const CONTRACT_ADDRESS = '0x824839fc794e1c676Ad9d7F9f540002D1cce75A1'
 
 export function acceptMatch(from: string, address: string): RpcTransactionRequest {
   return {
@@ -76,6 +76,18 @@ export function updateProfileDescription(from: string, description: string): Rpc
       abi: brunchClubABI,
       functionName: 'updateProfileDescription',
       args: [description],
+    }),
+  }
+}
+
+export function updateAvatar(from: string, ipfsHash: string): RpcTransactionRequest {
+  return {
+    from: getAddress(from),
+    to: CONTRACT_ADDRESS,
+    data: encodeFunctionData({
+      abi: brunchClubABI,
+      functionName: 'updateAvatar',
+      args: [ipfsHash],
     }),
   }
 }

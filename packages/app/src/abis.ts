@@ -98,8 +98,8 @@ export const brunchClubABI = [
     type: 'function',
     inputs: [
       { name: 'schema', internalType: 'bytes32', type: 'bytes32' },
-      { name: 'to', internalType: 'address', type: 'address' },
       { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
       { name: 'tag', internalType: 'string', type: 'string' },
     ],
     name: 'attestStatement',
@@ -144,6 +144,7 @@ export const brunchClubABI = [
         components: [
           { name: 'user', internalType: 'address', type: 'address' },
           { name: 'eoa', internalType: 'address', type: 'address' },
+          { name: 'avatar', internalType: 'string', type: 'string' },
           { name: 'name', internalType: 'string', type: 'string' },
           { name: 'description', internalType: 'string', type: 'string' },
           { name: 'objectives', internalType: 'string[]', type: 'string[]' },
@@ -221,6 +222,13 @@ export const brunchClubABI = [
   {
     stateMutability: 'nonpayable',
     type: 'function',
+    inputs: [{ name: 'ipfs', internalType: 'string', type: 'string' }],
+    name: 'updateAvatar',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
     inputs: [{ name: '_expertise', internalType: 'string[]', type: 'string[]' }],
     name: 'updateExpertise',
     outputs: [],
@@ -268,6 +276,7 @@ export const brunchClubABI = [
     outputs: [
       { name: 'user', internalType: 'address', type: 'address' },
       { name: 'eoa', internalType: 'address', type: 'address' },
+      { name: 'avatar', internalType: 'string', type: 'string' },
       { name: 'name', internalType: 'string', type: 'string' },
       { name: 'description', internalType: 'string', type: 'string' },
       { name: 'xp', internalType: 'uint256', type: 'uint256' },

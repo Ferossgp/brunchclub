@@ -8,6 +8,7 @@ import { FETCH_ATTESTATIONS } from "@/queries/eas"
 import { graphQLClient } from "@/lib/eas"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { ipfsURL } from "@/lib/utils"
 
 export default function Component({ params }: { params: { address: string } }) {
   const { data, isLoading } = useQuery({
@@ -50,8 +51,8 @@ export default function Component({ params }: { params: { address: string } }) {
     <div>
       <div className='flex flex-col items-center space-y-4'>
         <Avatar>
-          {data.user != null ? (
-            <AvatarImage src={`https://i.pravatar.cc/250?u=${data.user}`} />
+          {data.avatar != null ? (
+            <AvatarImage src={ipfsURL(data.avatar)} />
           ) : null}
           <AvatarFallback>🥑</AvatarFallback>
         </Avatar>

@@ -7,6 +7,7 @@ import { CONTRACT_ADDRESS, acceptMatch, rejectMatch } from '@/lib/brunch-club'
 import { createPublicClient, http, zeroAddress } from 'viem'
 import { baseGoerli } from 'viem/chains'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { ipfsURL } from '@/lib/utils'
 
 export default function Component() {
   const { sendSponsoredUserOperation, smartAccountAddress, eoaClient } = useSmartAccount()
@@ -85,8 +86,8 @@ export default function Component() {
     <div className='flex flex-col items-center justify-center py-12 p-4'>
       <div className='flex flex-col items-center space-y-4'>
         <Avatar>
-          {smartAccountAddress != null ? (
-            <AvatarImage src={`https://i.pravatar.cc/250?u=${currentMatch.user}`} />
+          {currentMatch.avatar != null ? (
+            <AvatarImage src={ipfsURL(currentMatch.avatar)} />
           ) : null}
           <AvatarFallback>🥑</AvatarFallback>
         </Avatar>

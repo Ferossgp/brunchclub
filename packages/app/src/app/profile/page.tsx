@@ -9,24 +9,75 @@ import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import {
   CONTRACT_ADDRESS,
+  updateAvatar,
   updateExpertise,
   updateObjectives,
   updateProfileDescription,
   updateProfileName,
 } from '@/lib/brunch-club'
-import { cn } from '@/lib/utils'
+import { cn, ipfsURL } from '@/lib/utils'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { createPublicClient, http } from 'viem'
 import { baseGoerli } from 'viem/chains'
 import { brunchClubABI } from '@/abis'
 import { Input } from '@/components/ui/input'
+import lighthouse from '@lighthouse-web3/sdk';
+
+const AvatarInput: React.FC<{ avatar?: string }> = ({ avatar }) => {
+  const { smartAccountAddress, sendSponsoredUserOperation } = useSmartAccount()
+  const [preview, setPreview] = useState<string | null>(null)
+  const progressCallback = (progressData: any) => {
+    // let percentageDone =
+    //   100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
+    console.log(progressData);
+  };
+
+  const queryClient = useQueryClient()
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (file: FileList | null) => {
+      if (smartAccountAddress == null || file == null) return
+      setPreview(URL.createObjectURL(file[0]))
+      const output = await lighthouse.upload(file, 'bfcfa5f9.3a3e5ab7fad2479a93573c7a02ffd32f', undefined, undefined, progressCallback);
+      await sendSponsoredUserOperation(updateAvatar(smartAccountAddress, output.data.Hash))
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: [{ entity: 'profile', address: smartAccountAddress }],
+      })
+    },
+  })
+
+  const url = preview ?? (avatar ? ipfsURL(avatar) : null)
+  return (
+    <div className='flex flex-col justify-center space-x-4 items-center'>
+      <label htmlFor="avatar-input">
+        <Avatar>
+          {url ? <AvatarImage src={url} /> : undefined}
+          <AvatarFallback>{
+            isPending ? <span className='loading loading-spinner'></span> : '🥑'
+          }</AvatarFallback>
+        </Avatar>
+      </label>
+
+      <input
+        id='avatar-input'
+        name='avatar-input'
+        onChange={e => mutate(e.target.files)} type="file"
+        className='hidden'
+        accept="image/jpeg"
+      />
+    </div>
+  )
+}
 
 const ProfileForm: React.FC<{
   name: string
   bio: string
+  avatar?: string
   objectives: string[]
   interests: string[]
 }> = ({
+  avatar,
   name: nameParam = '',
   bio: bioParam = '',
   objectives: objectivesParam = [],
@@ -70,14 +121,7 @@ const ProfileForm: React.FC<{
         </p>
         <div className='space-y-4'>
           <div className='space-y-2'>
-            <div className='flex justify-center space-x-4 items-center'>
-              <Avatar>
-                {smartAccountAddress != null ? (
-                  <AvatarImage src={`https://i.pravatar.cc/250?u=${smartAccountAddress}`} />
-                ) : null}
-                <AvatarFallback>🥑</AvatarFallback>
-              </Avatar>
-            </div>
+            <AvatarInput avatar={avatar} />
           </div>
           <div className='space-y-2'>
             <Label htmlFor='name'>Full Name</Label>
@@ -176,6 +220,7 @@ export default function Component() {
 
   return (
     <ProfileForm
+      avatar={data.avatar}
       name={data.name}
       bio={data.description}
       objectives={[...data.objectives]}
