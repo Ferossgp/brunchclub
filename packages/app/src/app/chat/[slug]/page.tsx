@@ -63,7 +63,7 @@ const ConfirmMatch: React.FC<{
   const [reported, setReported] = useLocalStorage(`ghost-report-${address}`, false)
 
   const { sendSponsoredUserOperation, smartAccountAddress } = useSmartAccount()
-  const { mutate: onReportGhosted, error } = useMutation({
+  const { mutate: onReportGhosted, isPending: isPendingGhosting } = useMutation({
     mutationFn: async () => {
       if (!smartAccountAddress) return
 
@@ -73,7 +73,7 @@ const ConfirmMatch: React.FC<{
     },
   })
 
-  const { mutate: onReportJoined } = useMutation({
+  const { mutate: onReportJoined, isPending } = useMutation({
     mutationFn: async () => {
       if (!smartAccountAddress) return
 
@@ -93,9 +93,11 @@ const ConfirmMatch: React.FC<{
           <p>Let us know if your match ghosted you!</p>
           <div className='card-actions pt-2'>
             <button className='btn btn-neutral flex-1' onClick={() => onReportGhosted()}>
+              {isPendingGhosting ? <span className='loading loading-spinner'></span> : null}
               Ghosted...
             </button>
             <button className='btn flex-1' onClick={() => onReportJoined()}>
+              {isPending ? <span className='loading loading-spinner'></span> : null}
               We MET!
             </button>
           </div>
@@ -112,7 +114,7 @@ const EndorseSkill: React.FC<{
   const [endorsed, setEndorsed] = useLocalStorage(`endorsed-${address}`, false)
   const { sendSponsoredUserOperation, smartAccountAddress } = useSmartAccount()
 
-  const { mutate: onEndorse } = useMutation({
+  const { mutate: onEndorse, isPending } = useMutation({
     mutationFn: async () => {
       if (!smartAccountAddress) return
 
@@ -135,6 +137,7 @@ const EndorseSkill: React.FC<{
               Skip
             </button>
             <button className='btn flex-1' onClick={() => onEndorse()}>
+              {isPending ? <span className='loading loading-spinner'></span> : null}
               Endorse!
             </button>
           </div>
