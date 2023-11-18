@@ -35,13 +35,15 @@ export default function Component({ params }: { params: { address: string } }) {
     enabled: params.address != null,
     queryFn: async () => {
       if (params.address == null) throw new Error('Missing address')
+
+      console.log(getAddress(params.address))
       return graphQLClient.request<any>(FETCH_ATTESTATIONS, {
         "where": {
           "recipient": {
             "equals": getAddress(params.address)
           }
         }
-      }).then(({ attestations }) => attestations.attestations ?? [])
+      }).then(({ attestations }) => attestations.attestations)
     },
   })
 
@@ -58,6 +60,7 @@ export default function Component({ params }: { params: { address: string } }) {
         </Avatar>
         <h2 className='text-2xl font-bold'>{data.name}</h2>
         <p className='text-center'>{data.description}</p>
+        <p className='text-center'>{attestations.length} people have endorsed {data.name} expertise!</p>
         <div className='flex flex-row gap-2'>
           {data.expertise?.map((expertise) => (
             <Button key={expertise} variant='secondary' size='sm'>
@@ -66,11 +69,6 @@ export default function Component({ params }: { params: { address: string } }) {
           ))}
         </div>
       </div>
-      <pre>
-        {JSON.stringify({ data, isLoading },
-          (key, value) => typeof value === 'bigint' ? value.toString() : value, 2)}
-        {JSON.stringify({ attestations, isLoadingAttestations }, (key, value) => typeof value === 'bigint' ? value.toString() : value, 2)}
-      </pre>
     </div>
   )
 }

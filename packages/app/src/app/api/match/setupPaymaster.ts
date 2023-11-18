@@ -1,10 +1,11 @@
-const { toHex } = require('viem')
-const { withAlchemyGasFeeEstimator } = require('@alchemy/aa-alchemy')
+import { AlchemyProvider, withAlchemyGasFeeEstimator } from "@alchemy/aa-alchemy"
+import { PaymasterAndDataMiddleware } from "@alchemy/aa-core"
+import { toHex } from 'viem'
 
 const paymasterUrl = 'https://paymaster.base.org'
 
-export const setupPaymaster = (baseSigner, smartAccountAddress, chainId) => {
-  const dummyPaymasterDataMiddleware = async (uoStruct) => {
+export const setupPaymaster = (baseSigner: AlchemyProvider, smartAccountAddress: string, chainId: number) => {
+  const dummyPaymasterDataMiddleware: PaymasterAndDataMiddleware = async (uoStruct) => {
     // Return an object like {paymasterAndData: "0x..."} where "0x..." is the valid paymasterAndData for your paymaster contract (used in gas estimation)
     // You can even hardcode these dummy singatures
     // You can read up more on dummy signatures here: https://www.alchemy.com/blog/dummy-signatures-and-gas-token-transfers
@@ -47,7 +48,7 @@ export const setupPaymaster = (baseSigner, smartAccountAddress, chainId) => {
   }
 
   // Define the PaymasterDataMiddlewareOverrideFunction
-  const paymasterDataMiddleware = async (uoStruct) => {
+  const paymasterDataMiddleware = async (uoStruct: object) => {
     // Return at minimum {paymasterAndData: "0x..."}, can also return gas estimates
     // console.log('final paymaster', uoStruct)
 
@@ -87,7 +88,7 @@ export const setupPaymaster = (baseSigner, smartAccountAddress, chainId) => {
     }
   }
 
-  const signer = withAlchemyGasFeeEstimator(baseSigner, 50n, 50n)
+  const signer = withAlchemyGasFeeEstimator(baseSigner, BigInt(50), BigInt(50))
 
   // Integrate the dummy paymaster data middleware and paymaster data middleware middleware with the provider
   const smartAccountSigner = signer.withPaymasterMiddleware({
@@ -97,7 +98,7 @@ export const setupPaymaster = (baseSigner, smartAccountAddress, chainId) => {
   return smartAccountSigner
 }
 
-async function resolveProperties(object) {
+async function resolveProperties(object: Record<string, any>) {
   const promises = Object.keys(object).map((key) => {
     const value = object[key]
     return Promise.resolve(value).then((v) => ({ key: key, value: v }))
@@ -108,5 +109,5 @@ async function resolveProperties(object) {
   return results.reduce((accum, curr) => {
     accum[curr.key] = curr.value
     return accum
-  }, {})
+  }, {} as Record<string, string>)
 }

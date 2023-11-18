@@ -8,7 +8,6 @@ import { LightSmartContractAccount, getDefaultLightAccountFactoryAddress } from 
 import { LocalAccountSigner, getDefaultEntryPointAddress } from '@alchemy/aa-core'
 
 const chain = baseGoerli
-const rpcUrl = process.env.BASE_GOERLI_ALCHEMY_API_URL
 
 const client = createPublicClient({
   chain: baseGoerli,
@@ -48,10 +47,10 @@ async function getAvaliableUsers() {
 }
 
 async function addNewMatch(user1: string, user2: string) {
-  const localSigner = LocalAccountSigner.mnemonicToAccountSigner(process.env.MNEMONIC)
+  const localSigner = LocalAccountSigner.mnemonicToAccountSigner(process.env.MNEMONIC as string)
 
   const baseSigner = new AlchemyProvider({
-    rpcUrl,
+    apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY as string,
     chain,
     opts: {
       txMaxRetries: 60,
@@ -74,10 +73,10 @@ async function addNewMatch(user1: string, user2: string) {
 }
 
 async function makeAttestation(from: string, to: string, tag: string) {
-  const localSigner = LocalAccountSigner.mnemonicToAccountSigner(process.env.MNEMONIC)
+  const localSigner = LocalAccountSigner.mnemonicToAccountSigner(process.env.MNEMONIC as string)
 
   const baseSigner = new AlchemyProvider({
-    rpcUrl,
+    apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY as string,
     chain,
     opts: {
       txMaxRetries: 60,
@@ -120,11 +119,11 @@ async function makeRandomMatches() {
 export async function GET() {
   // await makeRandomMatches()
 
-  // await makeAttestation(
-  //   '0x109282750F1030941e81b6c2551E7B1157A24EaB',
-  //   '0x5c9Ec83A02771C338B22cA59a9097C4a145dBBFA',
-  //   'test'
-  // )
+  await makeAttestation(
+    '0x5c9Ec83A02771C338B22cA59a9097C4a145dBBFA',
+    '0x109282750F1030941e81b6c2551E7B1157A24EaB',
+    'test'
+  )
 
   return Response.json({ data: 'World!' })
 }

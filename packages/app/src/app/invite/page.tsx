@@ -8,6 +8,8 @@ import { createPublicClient, http, zeroAddress } from 'viem'
 import { baseGoerli } from 'viem/chains'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { ipfsURL } from '@/lib/utils'
+import { graphQLClient } from '@/lib/eas'
+import { FETCH_ATTESTATIONS } from '@/queries/eas'
 
 export default function Component() {
   const { sendSponsoredUserOperation, smartAccountAddress, eoaClient } = useSmartAccount()
@@ -78,6 +80,22 @@ export default function Component() {
     },
   })
 
+  const { data: attestations } = useQuery({
+    queryKey: [{ entity: 'attestations', address: currentMatch?.user }],
+    enabled: currentMatch?.user != null,
+    queryFn: async () => {
+      if (currentMatch?.user == null) throw new Error('Missing address')
+
+      return graphQLClient.request<any>(FETCH_ATTESTATIONS, {
+        "where": {
+          "recipient": {
+            "equals": currentMatch?.user
+          }
+        }
+      }).then(({ attestations }) => attestations.attestations)
+    },
+  })
+
   if (isLoading || smartAccountAddress == null) return <div>Baking some sourdough bread (Loading)...</div>
 
   if (currentMatch == null) return <div>No match yet, please come back later!</div>
@@ -100,6 +118,7 @@ export default function Component() {
             </Button>
           ))}
         </div>
+        <p className='text-center'>{attestations.length} people have endorsed {currentMatch.name} expertise!</p>
       </div>
       <div className='flex space-x-4 mt-8'>
         <button className='btn btn-wide btn-neutral' onClick={() => onRejectPress()}>
