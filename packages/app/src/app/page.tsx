@@ -1,7 +1,6 @@
 'use client'
 import { useSmartAccount } from '@/context/Web3'
 import { useQuery } from '@tanstack/react-query'
-import { SITE_DESCRIPTION } from '@/utils/site'
 import { createPublicClient, http } from 'viem'
 import { baseGoerli } from 'viem/chains'
 import { CONTRACT_ADDRESS } from '@/lib/brunch-club'
@@ -51,7 +50,7 @@ export default function Home() {
 
   return (
     <div className='flex flex-col gap-6'>
-      <p>{SITE_DESCRIPTION}</p>
+      <h2>Here you can see all your matches</h2>
       <div className='flex gap-4'>
         {data ? (
           data.map((profile) => {
@@ -76,10 +75,10 @@ const RenderProfile: React.FC<{
   }
 }> = ({ profile }) => {
   return (
-    <LinkComponent href={`/chat/${profile.eoa}`}>
-      <div className='card card-compact w-96 bg-base-100 shadow-xl items-center'>
+    <LinkComponent href={`/chat/${profile.user}`}>
+      <div className='card card-compact w-96 bg-base-100 shadow-md border pt-4 items-center'>
         <Avatar>
-          {profile.user != null ? <AvatarImage src={`https://i.pravatar.cc/150?u=${profile.user}`} /> : null}
+          {profile.user != null ? <AvatarImage src={`https://i.pravatar.cc/250?u=${profile.user}`} /> : null}
           <AvatarFallback>🥑</AvatarFallback>
         </Avatar>
         <div className='card-body'>

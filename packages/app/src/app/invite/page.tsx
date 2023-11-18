@@ -76,7 +76,7 @@ export default function Component() {
       <div className='flex flex-col items-center space-y-4'>
         <Avatar>
           {smartAccountAddress != null ? (
-            <AvatarImage src={`https://i.pravatar.cc/150?u=${currentMatch.user}`} />
+            <AvatarImage src={`https://i.pravatar.cc/250?u=${currentMatch.user}`} />
           ) : null}
           <AvatarFallback>🥑</AvatarFallback>
         </Avatar>

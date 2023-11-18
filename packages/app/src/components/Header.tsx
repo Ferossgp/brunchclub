@@ -5,8 +5,8 @@ import { Connect } from './Connect'
 
 export function Header() {
   return (
-    <div className='p-4 '>
-      <header className='navbar bg-base-100 shadow-md p-2 rounded-box'>
+    <div className='container py-4'>
+      <header className='navbar bg-base-100 shadow-sm border p-2 rounded-box'>
         <div className='flex-1 px-2 space-x-2'>
           <LinkComponent href='/'>
             <h1 className='text-lg font-bold'>{SITE_NAME}</h1>

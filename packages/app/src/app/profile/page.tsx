@@ -67,7 +67,7 @@ const ProfileForm: React.FC<{
             <div className='flex justify-center space-x-4 items-center'>
               <Avatar>
                 {smartAccountAddress != null ? (
-                  <AvatarImage src={`https://i.pravatar.cc/150?u=${smartAccountAddress}`} />
+                  <AvatarImage src={`https://i.pravatar.cc/250?u=${smartAccountAddress}`} />
                 ) : null}
                 <AvatarFallback>🥑</AvatarFallback>
               </Avatar>
