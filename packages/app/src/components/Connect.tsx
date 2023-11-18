@@ -33,10 +33,8 @@ export function Connect() {
   }
 
   return (
-    <div className='py-4'>
-      <button className='btn btn-primary' onClick={login}>
-        Log in
-      </button>
-    </div>
+    <button className='btn btn-primary' onClick={login}>
+      Log in
+    </button>
   )
 }

@@ -910,7 +910,7 @@ export function getBrunchClub(
  */
 export function readBrunchClub<
   TAbi extends readonly unknown[] = typeof brunchClubABI,
-  TFunctionName extends string = string,
+  TFunctionName extends string = string
 >(
   config: Omit<ReadContractConfig<TAbi, TFunctionName>, 'abi' | 'address'> & {
     chainId?: keyof typeof brunchClubAddress
@@ -931,7 +931,7 @@ export function readBrunchClub<
 export function writeBrunchClub<
   TFunctionName extends string,
   TMode extends WriteContractMode,
-  TChainId extends number = keyof typeof brunchClubAddress,
+  TChainId extends number = keyof typeof brunchClubAddress
 >(
   config:
     | (Omit<WriteContractPreparedArgs<typeof brunchClubABI, TFunctionName>, 'abi' | 'address'> & {
@@ -957,7 +957,7 @@ export function writeBrunchClub<
  */
 export function prepareWriteBrunchClub<
   TAbi extends readonly unknown[] = typeof brunchClubABI,
-  TFunctionName extends string = string,
+  TFunctionName extends string = string
 >(
   config: Omit<PrepareWriteContractConfig<TAbi, TFunctionName>, 'abi' | 'address'> & {
     chainId?: keyof typeof brunchClubAddress
@@ -1127,7 +1127,7 @@ export function writeMessage<TFunctionName extends string>(
  */
 export function prepareWriteMessage<
   TAbi extends readonly unknown[] = typeof messageABI,
-  TFunctionName extends string = string,
+  TFunctionName extends string = string
 >(config: Omit<PrepareWriteContractConfig<TAbi, TFunctionName>, 'abi'>) {
   return prepareWriteContract({ abi: messageABI, ...config } as unknown as PrepareWriteContractConfig<
     TAbi,

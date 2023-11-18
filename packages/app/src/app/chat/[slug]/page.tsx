@@ -5,7 +5,7 @@ import { viemSignerType } from '@pushprotocol/restapi'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { createPublicClient, getAddress, http } from 'viem'
 import { baseGoerli } from 'viem/chains'
-import { CONTRACT_ADDRESS, reportGhosted, reportJoined } from '@/lib/brunch-club'
+import { CONTRACT_ADDRESS, attestStatement, reportGhosted, reportJoined } from '@/lib/brunch-club'
 import { brunchClubABI } from '@/abis'
 import { useLocalStorage } from 'usehooks-ts'
 
@@ -35,6 +35,7 @@ export default function PChat({ params }: { params: { slug: string } }) {
     return <div>Growing some avocados...</div>
   }
 
+  const randomSkill = data.expertise.length > 0 ? data.expertise[Math.floor(Math.random() * data.expertise.length)] : undefined
   return (
     <>
       <h2>Live chat with {data.name}</h2>
@@ -46,7 +47,9 @@ export default function PChat({ params }: { params: { slug: string } }) {
         </div>
         <div className='col-span-3 space-y-2'>
           <ConfirmMatch address={data.user} />
-          <EndorseSkill address={data.user} tag='programming' />
+          {randomSkill != null ? (
+            <EndorseSkill address={data.user} tag={randomSkill} />
+          ) : null}
         </div>
       </div>
     </>
@@ -60,7 +63,7 @@ const ConfirmMatch: React.FC<{
   const [reported, setReported] = useLocalStorage(`ghost-report-${address}`, false)
 
   const { sendSponsoredUserOperation, smartAccountAddress } = useSmartAccount()
-  const { mutate: onReportGhosted } = useMutation({
+  const { mutate: onReportGhosted, error } = useMutation({
     mutationFn: async () => {
       if (!smartAccountAddress) return
 
@@ -113,7 +116,7 @@ const EndorseSkill: React.FC<{
     mutationFn: async () => {
       if (!smartAccountAddress) return
 
-      throw new Error('Not implemented')
+      await sendSponsoredUserOperation(attestStatement(smartAccountAddress, address, tag)).then(console.log)
 
       setEndorsed(true)
     },
