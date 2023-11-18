@@ -12,7 +12,7 @@ describe('BrunchClub', function () {
 
     const BrunchClub = await ethers.getContractFactory('BrunchClub')
 
-    const brunchClub = await BrunchClub.deploy()
+    const brunchClub = await BrunchClub.deploy('0x4200000000000000000000000000000000000021')
 
     return { brunchClub, owner, otherAccount }
   }
@@ -51,7 +51,6 @@ describe('BrunchClub', function () {
 
       const tx = await brunchClub.updateProfileDescription('test')
       await tx.wait()
-      console.log(await brunchClub.getUsers())
 
       expect((await brunchClub.getUsers()).length).to.equal(1)
       expect((await brunchClub.getUser(owner.address)).description).to.equal('test')
@@ -82,6 +81,19 @@ describe('BrunchClub', function () {
 
       await brunchClub.connect(otherAccount).acceptMatch(owner.address)
       expect((await brunchClub.getMatches())[0][3]).to.equal(true)
+    })
+
+    it('make the attestation', async function () {
+      const { brunchClub, owner, otherAccount } = await loadFixture(deployBrunchClubFixture)
+
+      const res = await brunchClub.attestStatement(
+        '0x1883d7a418f73d92bcf3160c13fe18cfd53303cd7918e891b88da8ec00ae8b48',
+        owner.address,
+        otherAccount.address,
+        'test'
+      )
+
+      console.log(res)
     })
   })
 })

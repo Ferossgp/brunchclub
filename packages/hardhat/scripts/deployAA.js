@@ -46,6 +46,7 @@ async function main() {
   const conData = encodeDeployData({
     abi,
     bytecode,
+    args: ['0x4200000000000000000000000000000000000021'],
   })
 
   const nonce = await smartAccountSigner.account.getNonce()

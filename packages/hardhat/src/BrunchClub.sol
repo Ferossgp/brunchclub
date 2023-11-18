@@ -2,8 +2,8 @@
 
 pragma solidity >0.7.0 <0.9.0;
 
-// import {IEAS, AttestationRequest, AttestationRequestData} from '@ethereum-attestation-service/eas-contracts/contracts/IEAS.sol';
-// import {NO_EXPIRATION_TIME, EMPTY_UID} from '@ethereum-attestation-service/eas-contracts/contracts/Common.sol';
+import {IEAS, AttestationRequest, AttestationRequestData} from '@ethereum-attestation-service/eas-contracts/contracts/IEAS.sol';
+import {NO_EXPIRATION_TIME, EMPTY_UID} from '@ethereum-attestation-service/eas-contracts/contracts/Common.sol';
 
 /**
  * @title BrunchClub
@@ -27,7 +27,7 @@ contract BrunchClub {
   address public owner;
   uint256 public epoch;
   // The address of the global EAS contract.
-  // IEAS private immutable _eas;
+  IEAS private immutable _eas;
 
   struct User {
     address user;
@@ -57,15 +57,15 @@ contract BrunchClub {
   mapping(address => mapping(uint256 => bool)) public skippedEpoch;
   mapping(address => User) public users;
 
-  constructor() {
+  constructor(IEAS eas) {
     owner = msg.sender;
     epoch = 0;
 
-    // if (address(eas) == address(0)) {
-    //   revert InvalidEAS();
-    // }
+    if (address(eas) == address(0)) {
+      revert InvalidEAS();
+    }
 
-    // _eas = eas;
+    _eas = eas;
   }
 
   function addMatch(address user1, address user2) public {
@@ -182,20 +182,20 @@ contract BrunchClub {
     users[msg.sender].expertise = expertise;
   }
 
-  // function attestSkill(bytes32 schema, uint256 input) external returns (bytes32) {
-  //   return
-  //     _eas.attest(
-  //       AttestationRequest({
-  //         schema: schema,
-  //         data: AttestationRequestData({
-  //           recipient: address(0), // No recipient
-  //           expirationTime: NO_EXPIRATION_TIME, // No expiration time
-  //           revocable: true,
-  //           refUID: EMPTY_UID, // No references UI
-  //           data: abi.encode(input), // Encode a single uint256 as a parameter to the schema
-  //           value: 0 // No value/ETH
-  //         })
-  //       })
-  //     );
-  // }
+  function attestStatement(bytes32 schema, address to, address from, string calldata tag) external returns (bytes32) {
+    return
+      _eas.attest(
+        AttestationRequest({
+          schema: schema,
+          data: AttestationRequestData({
+            recipient: address(0), // No recipient
+            expirationTime: NO_EXPIRATION_TIME, // No expiration time
+            revocable: true,
+            refUID: EMPTY_UID, // No references UI
+            data: abi.encode(to, from, tag), // Encode a single uint256 as a parameter to the schema
+            value: 0 // No value/ETH
+          })
+        })
+      );
+  }
 }

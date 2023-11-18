@@ -1,7 +1,7 @@
-import { brunchClubABI } from "@/abis";
-import { RpcTransactionRequest, encodeFunctionData, getAddress } from "viem";
+import { brunchClubABI } from '@/abis'
+import { RpcTransactionRequest, encodeFunctionData, getAddress } from 'viem'
 
-export const CONTRACT_ADDRESS = '0x7C035d20e863c52B57de37090bf5066efDB0D36c'
+export const CONTRACT_ADDRESS = '0xCB44fDAafb7B31fb08643343f019e4ab8F88A16b'
 
 export function acceptMatch(from: string, address: string): RpcTransactionRequest {
   return {
@@ -9,7 +9,7 @@ export function acceptMatch(from: string, address: string): RpcTransactionReques
     to: CONTRACT_ADDRESS,
     data: encodeFunctionData({
       abi: brunchClubABI,
-      functionName: "acceptMatch",
+      functionName: 'acceptMatch',
       args: [getAddress(address)],
     }),
   }
@@ -21,8 +21,37 @@ export function rejectMatch(from: string, address: string): RpcTransactionReques
     to: CONTRACT_ADDRESS,
     data: encodeFunctionData({
       abi: brunchClubABI,
-      functionName: "rejectMatch",
+      functionName: 'rejectMatch',
       args: [getAddress(address)],
+    }),
+  }
+}
+
+export function addMatch(from: string, address1: string, address2: string): RpcTransactionRequest {
+  return {
+    from: getAddress(from),
+    to: CONTRACT_ADDRESS,
+    data: encodeFunctionData({
+      abi: brunchClubABI,
+      functionName: 'addMatch',
+      args: [getAddress(address1), getAddress(address2)],
+    }),
+  }
+}
+
+export function attestStatement(from: string, to: string, tag: string): RpcTransactionRequest {
+  return {
+    from: getAddress(from),
+    to: CONTRACT_ADDRESS,
+    data: encodeFunctionData({
+      abi: brunchClubABI,
+      functionName: 'attestStatement',
+      args: [
+        '0x1883d7a418f73d92bcf3160c13fe18cfd53303cd7918e891b88da8ec00ae8b48',
+        getAddress(from),
+        getAddress(to),
+        tag,
+      ],
     }),
   }
 }
@@ -33,7 +62,7 @@ export function contractRegister(from: string, eoa: string): RpcTransactionReque
     to: CONTRACT_ADDRESS,
     data: encodeFunctionData({
       abi: brunchClubABI,
-      functionName: "register",
+      functionName: 'register',
       args: [getAddress(eoa)],
     }),
   }
@@ -45,7 +74,7 @@ export function updateProfileDescription(from: string, description: string): Rpc
     to: CONTRACT_ADDRESS,
     data: encodeFunctionData({
       abi: brunchClubABI,
-      functionName: "updateProfileDescription",
+      functionName: 'updateProfileDescription',
       args: [description],
     }),
   }
@@ -57,7 +86,7 @@ export function updateProfileName(from: string, name: string): RpcTransactionReq
     to: CONTRACT_ADDRESS,
     data: encodeFunctionData({
       abi: brunchClubABI,
-      functionName: "updateName",
+      functionName: 'updateName',
       args: [name],
     }),
   }
@@ -69,7 +98,7 @@ export function updateObjectives(from: string, objectives: string[]): RpcTransac
     to: CONTRACT_ADDRESS,
     data: encodeFunctionData({
       abi: brunchClubABI,
-      functionName: "updateObjectives",
+      functionName: 'updateObjectives',
       args: [objectives],
     }),
   }
@@ -81,7 +110,7 @@ export function updateExpertise(from: string, expertise: string[]): RpcTransacti
     to: CONTRACT_ADDRESS,
     data: encodeFunctionData({
       abi: brunchClubABI,
-      functionName: "updateExpertise",
+      functionName: 'updateExpertise',
       args: [expertise],
     }),
   }
