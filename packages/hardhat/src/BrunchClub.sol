@@ -32,6 +32,7 @@ contract BrunchClub {
   struct User {
     address user;
     address eoa;
+    string name;
     string description;
     string[] objectives;
     string[] expertise;
@@ -149,6 +150,12 @@ contract BrunchClub {
     require(users[msg.sender].user != address(0), 'User not registered');
 
     users[msg.sender].description = desc;
+  }
+
+  function updateName(string calldata name) public {
+    require(users[msg.sender].user != address(0), 'User not registered');
+
+    users[msg.sender].name = name;
   }
 
   function updateObjectives(string[] calldata _objectives) public {
