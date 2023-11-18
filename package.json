@@ -11,6 +11,8 @@
     "build": "yarn workspaces -pt run build",
     "test": "yarn workspaces -pt run test"
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "@pushprotocol/restapi": "^1.4.38",
+    "@pushprotocol/socket": "^0.5.3"
+  }
 }
