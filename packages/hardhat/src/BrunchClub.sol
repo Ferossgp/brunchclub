@@ -78,7 +78,7 @@ contract BrunchClub {
     return matches;
   }
 
-   function getUsers() public view returns (address[] memory) {
+  function getUsers() public view returns (address[] memory) {
     return allUsers;
   }
 
@@ -141,7 +141,7 @@ contract BrunchClub {
   function register(address eoa) public {
     require(users[msg.sender].user == address(0), 'User already registered');
     string[] memory empty;
-    users[msg.sender] = User(msg.sender, eoa, '', empty, empty, 0);
+    users[msg.sender] = User(msg.sender, eoa, '', '', empty, empty, 0);
     allUsers.push(msg.sender);
     emit NewUser(msg.sender);
   }

@@ -2,6 +2,7 @@
 import React from 'react'
 import { useLogin, usePrivy } from '@privy-io/react-auth'
 import { useRouter } from 'next/navigation'
+import { LinkComponent } from './LinkComponent'
 
 export function Connect() {
   const router = useRouter()
@@ -12,13 +13,19 @@ export function Connect() {
   })
 
   if (!ready) {
-    return <div>Loading...</div>
+    return <span className="loading loading-spinner"></span>
   }
 
   if (authenticated) {
     return (
-      <div className='py-4'>
-        <button className='bg-violet-600 hover:bg-violet-700 py-3 px-6 text-white rounded-lg' onClick={logout}>
+      <div className='space-x-4'>
+        <LinkComponent href='/invite'>
+          <button className='btn btn-ghost'>See Pending Matches</button>
+        </LinkComponent>
+        <LinkComponent href='/profile'>
+          <span className='btn btn-ghost'>Profile</span>
+        </LinkComponent>
+        <button className='btn' onClick={logout}>
           Log out
         </button>
       </div>
@@ -27,7 +34,7 @@ export function Connect() {
 
   return (
     <div className='py-4'>
-      <button className='bg-violet-600 hover:bg-violet-700 py-3 px-6 text-white rounded-lg' onClick={login}>
+      <button className='btn btn-primary' onClick={login}>
         Log in
       </button>
     </div>

@@ -5,15 +5,17 @@ import { Connect } from './Connect'
 
 export function Header() {
   return (
-    <header className='navbar flex justify-between p-4 pt-0'>
-      <LinkComponent href='/'>
-        <h1 className='text-lg font-bold'>{SITE_NAME}</h1>
-      </LinkComponent>
-
-      <LinkComponent href='/profile'>
-        <h1 className='text-lg font-bold'>Profile</h1>
-      </LinkComponent>
-      <Connect />
-    </header>
+    <div className='p-4 '>
+      <header className='navbar bg-base-100 shadow-md p-2 rounded-box'>
+        <div className='flex-1 px-2 space-x-2'>
+          <LinkComponent href='/'>
+            <h1 className='text-lg font-bold'>{SITE_NAME}</h1>
+          </LinkComponent>
+        </div>
+        <div className="flex-none">
+          <Connect />
+        </div>
+      </header>
+    </div>
   )
 }

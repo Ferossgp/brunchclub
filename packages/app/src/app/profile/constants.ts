@@ -1,4 +1,4 @@
-export const objectives = [
+export const OBJECTIVES = [
   {
     title: "Brainstorm with peers"
   },
@@ -37,7 +37,7 @@ export const objectives = [
   }
 ]
 
-export const interests = [
+export const INTERESTS = [
   {
     title: "entrepreneurship"
   },

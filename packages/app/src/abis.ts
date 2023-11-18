@@ -85,6 +85,13 @@ export const brunchClubABI = [
   {
     stateMutability: 'view',
     type: 'function',
+    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: 'allUsers',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
     inputs: [],
     name: 'epoch',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
@@ -107,6 +114,35 @@ export const brunchClubABI = [
         ],
       },
     ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: '_user', internalType: 'address', type: 'address' }],
+    name: 'getUser',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct BrunchClub.User',
+        type: 'tuple',
+        components: [
+          { name: 'user', internalType: 'address', type: 'address' },
+          { name: 'eoa', internalType: 'address', type: 'address' },
+          { name: 'name', internalType: 'string', type: 'string' },
+          { name: 'description', internalType: 'string', type: 'string' },
+          { name: 'objectives', internalType: 'string[]', type: 'string[]' },
+          { name: 'expertise', internalType: 'string[]', type: 'string[]' },
+          { name: 'xp', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'getUsers',
+    outputs: [{ name: '', internalType: 'address[]', type: 'address[]' }],
   },
   { stateMutability: 'nonpayable', type: 'function', inputs: [], name: 'incrementEpoch', outputs: [] },
   {
@@ -176,6 +212,13 @@ export const brunchClubABI = [
   {
     stateMutability: 'nonpayable',
     type: 'function',
+    inputs: [{ name: 'name', internalType: 'string', type: 'string' }],
+    name: 'updateName',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
     inputs: [{ name: '_objectives', internalType: 'string[]', type: 'string[]' }],
     name: 'updateObjectives',
     outputs: [],
@@ -195,6 +238,7 @@ export const brunchClubABI = [
     outputs: [
       { name: 'user', internalType: 'address', type: 'address' },
       { name: 'eoa', internalType: 'address', type: 'address' },
+      { name: 'name', internalType: 'string', type: 'string' },
       { name: 'description', internalType: 'string', type: 'string' },
       { name: 'xp', internalType: 'uint256', type: 'uint256' },
     ],
