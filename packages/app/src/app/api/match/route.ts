@@ -104,6 +104,8 @@ async function makeAttestation(from: string, to: string, tag: string) {
 async function makeRandomMatches() {
   const freeUsers = await getAvaliableUsers()
 
+  // const freeUsers = ['0x109282750F1030941e81b6c2551E7B1157A24EaB', '0x29369c3E2d9EC68f6f900C27de3eFb161133Cde7']
+
   console.log(freeUsers)
 
   while (freeUsers.length >= 2) {

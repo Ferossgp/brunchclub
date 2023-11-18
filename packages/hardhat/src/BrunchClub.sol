@@ -182,17 +182,17 @@ contract BrunchClub {
     users[msg.sender].expertise = expertise;
   }
 
-  function attestStatement(bytes32 schema, address to, address from, string calldata tag) external returns (bytes32) {
+  function attestStatement(bytes32 schema, address from, address to, string calldata tag) external returns (bytes32) {
     return
       _eas.attest(
         AttestationRequest({
           schema: schema,
           data: AttestationRequestData({
-            recipient: address(0), // No recipient
+            recipient: to, // No recipient
             expirationTime: NO_EXPIRATION_TIME, // No expiration time
             revocable: true,
             refUID: EMPTY_UID, // No references UI
-            data: abi.encode(to, from, tag), // Encode a single uint256 as a parameter to the schema
+            data: abi.encode(from, to, tag), // Encode a single uint256 as a parameter to the schema
             value: 0 // No value/ETH
           })
         })
