@@ -12,7 +12,7 @@ describe('BrunchClub', function () {
 
     const BrunchClub = await ethers.getContractFactory('BrunchClub')
 
-    const brunchClub = await BrunchClub.deploy();
+    const brunchClub = await BrunchClub.deploy()
 
     return { brunchClub, owner, otherAccount }
   }
@@ -32,6 +32,29 @@ describe('BrunchClub', function () {
       expect((await brunchClub.getMatches()).length).to.equal(0)
       await brunchClub.addMatch(owner.address, otherAccount.address)
       expect((await brunchClub.getMatches()).length).to.equal(1)
+    })
+
+    it('Should add new user', async function () {
+      const { brunchClub, otherAccount } = await loadFixture(deployBrunchClubFixture)
+
+      expect((await brunchClub.getUsers()).length).to.equal(0)
+      await brunchClub.register(otherAccount.address)
+      expect((await brunchClub.getUsers()).length).to.equal(1)
+    })
+
+    it('Should return user', async function () {
+      const { brunchClub, owner } = await loadFixture(deployBrunchClubFixture)
+
+      expect((await brunchClub.getUsers()).length).to.equal(0)
+      const tx1 = await brunchClub.register(owner.address)
+      await tx1.wait()
+
+      const tx = await brunchClub.updateProfileDescription('test')
+      await tx.wait()
+      console.log(await brunchClub.getUsers())
+
+      expect((await brunchClub.getUsers()).length).to.equal(1)
+      expect((await brunchClub.getUser(owner.address)).description).to.equal('test')
     })
 
     it('Should reject a match', async function () {

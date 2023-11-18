@@ -51,6 +51,7 @@ contract BrunchClub {
   event NewUser(address indexed user);
 
   Match[] public matches;
+  address[] public allUsers;
   mapping(address => mapping(address => bool)) public accepted;
   mapping(address => mapping(uint256 => bool)) public skippedEpoch;
   mapping(address => User) public users;
@@ -74,6 +75,14 @@ contract BrunchClub {
 
   function getMatches() public view returns (Match[] memory) {
     return matches;
+  }
+
+   function getUsers() public view returns (address[] memory) {
+    return allUsers;
+  }
+
+  function getUser(address _user) public view returns (User memory) {
+    return users[_user];
   }
 
   function incrementEpoch() public {
@@ -132,6 +141,7 @@ contract BrunchClub {
     require(users[msg.sender].user == address(0), 'User already registered');
     string[] memory empty;
     users[msg.sender] = User(msg.sender, eoa, '', empty, empty, 0);
+    allUsers.push(msg.sender);
     emit NewUser(msg.sender);
   }
 
