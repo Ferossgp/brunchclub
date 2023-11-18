@@ -43,15 +43,17 @@ export default function Component({ params }: { params: { address: string } }) {
             "equals": getAddress(params.address)
           }
         }
-      }).then(({ attestations }) => attestations.attestations)
+      }).then(({ attestations }) => attestations)
     },
   })
+
+  console.log(attestations)
 
   if (data == null) return null
 
   return (
     <div>
-      <div className='flex flex-col items-center space-y-4'>
+      <div className='flex flex-col items-center space-y-4 max-w-3xl mx-auto'>
         <Avatar>
           {data.avatar != null ? (
             <AvatarImage src={ipfsURL(data.avatar)} />
@@ -60,7 +62,8 @@ export default function Component({ params }: { params: { address: string } }) {
         </Avatar>
         <h2 className='text-2xl font-bold'>{data.name}</h2>
         <p className='text-center'>{data.description}</p>
-        <p className='text-center'>{attestations.length} people have endorsed {data.name} expertise!</p>
+        {isLoadingAttestations ? <div>Loading attestations...</div> :
+          <p className='text-center'>{attestations?.length ?? 0} people have endorsed {data.name} expertise!</p>}
         <div className='flex flex-row gap-2'>
           {data.expertise?.map((expertise) => (
             <Button key={expertise} variant='secondary' size='sm'>

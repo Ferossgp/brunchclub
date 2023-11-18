@@ -80,7 +80,7 @@ export default function Component() {
     },
   })
 
-  const { data: attestations } = useQuery({
+  const { data: attestations, isLoading: isLoadingAttestations } = useQuery({
     queryKey: [{ entity: 'attestations', address: currentMatch?.user }],
     enabled: currentMatch?.user != null,
     queryFn: async () => {
@@ -92,7 +92,7 @@ export default function Component() {
             "equals": currentMatch?.user
           }
         }
-      }).then(({ attestations }) => attestations.attestations)
+      }).then(({ attestations }) => attestations)
     },
   })
 
@@ -118,7 +118,8 @@ export default function Component() {
             </Button>
           ))}
         </div>
-        <p className='text-center'>{attestations.length} people have endorsed {currentMatch.name} expertise!</p>
+        {isLoadingAttestations ? <div>Loading attestations...</div> :
+          <p className='text-center'>{attestations?.length ?? 0} people have endorsed {currentMatch.name} expertise!</p>}
       </div>
       <div className='flex space-x-4 mt-8'>
         <button className='btn btn-wide btn-neutral' onClick={() => onRejectPress()}>
