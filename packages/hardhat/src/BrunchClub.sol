@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity >0.7.0 <0.9.0;
+
+// import {IEAS, AttestationRequest, AttestationRequestData} from '@ethereum-attestation-service/eas-contracts/contracts/IEAS.sol';
+// import {NO_EXPIRATION_TIME, EMPTY_UID} from '@ethereum-attestation-service/eas-contracts/contracts/Common.sol';
 
 /**
  * @title BrunchClub
@@ -19,11 +22,19 @@ pragma solidity >=0.7.0 <0.9.0;
  * Then all matches are added to the contract by the owner.
  */
 contract BrunchClub {
+  error InvalidEAS();
+
   address public owner;
   uint256 public epoch;
+  // The address of the global EAS contract.
+  // IEAS private immutable _eas;
 
   struct User {
     address user;
+    address eoa;
+    string description;
+    string[] objectives;
+    string[] expertise;
     uint256 xp;
   }
 
@@ -47,6 +58,12 @@ contract BrunchClub {
   constructor() {
     owner = msg.sender;
     epoch = 0;
+
+    // if (address(eas) == address(0)) {
+    //   revert InvalidEAS();
+    // }
+
+    // _eas = eas;
   }
 
   function addMatch(address user1, address user2) public {
@@ -111,9 +128,57 @@ contract BrunchClub {
     skippedEpoch[msg.sender][_epoch] = true;
   }
 
-  function register() public {
+  function register(address eoa) public {
     require(users[msg.sender].user == address(0), 'User already registered');
-    users[msg.sender] = User(msg.sender, 0);
+    string[] memory empty;
+    users[msg.sender] = User(msg.sender, eoa, '', empty, empty, 0);
     emit NewUser(msg.sender);
   }
+
+  function updateProfileDescription(string calldata desc) public {
+    require(users[msg.sender].user != address(0), 'User not registered');
+
+    users[msg.sender].description = desc;
+  }
+
+  function updateObjectives(string[] calldata _objectives) public {
+    require(users[msg.sender].user != address(0), 'User not registered');
+
+    string[] memory objectives = new string[](_objectives.length);
+
+    for (uint256 i = 0; i < _objectives.length; i++) {
+      objectives[i] = _objectives[i];
+    }
+
+    users[msg.sender].objectives = objectives;
+  }
+
+  function updateExpertise(string[] calldata _expertise) public {
+    require(users[msg.sender].user != address(0), 'User not registered');
+
+    string[] memory expertise = new string[](_expertise.length);
+
+    for (uint256 i = 0; i < _expertise.length; i++) {
+      expertise[i] = _expertise[i];
+    }
+
+    users[msg.sender].expertise = expertise;
+  }
+
+  // function attestSkill(bytes32 schema, uint256 input) external returns (bytes32) {
+  //   return
+  //     _eas.attest(
+  //       AttestationRequest({
+  //         schema: schema,
+  //         data: AttestationRequestData({
+  //           recipient: address(0), // No recipient
+  //           expirationTime: NO_EXPIRATION_TIME, // No expiration time
+  //           revocable: true,
+  //           refUID: EMPTY_UID, // No references UI
+  //           data: abi.encode(input), // Encode a single uint256 as a parameter to the schema
+  //           value: 0 // No value/ETH
+  //         })
+  //       })
+  //     );
+  // }
 }

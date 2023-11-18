@@ -11,7 +11,8 @@ describe('BrunchClub', function () {
     const [owner, otherAccount] = await ethers.getSigners()
 
     const BrunchClub = await ethers.getContractFactory('BrunchClub')
-    const brunchClub = await BrunchClub.deploy()
+
+    const brunchClub = await BrunchClub.deploy();
 
     return { brunchClub, owner, otherAccount }
   }
