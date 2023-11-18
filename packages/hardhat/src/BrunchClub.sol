@@ -96,6 +96,26 @@ contract BrunchClub {
     owner = _owner;
   }
 
+  /**
+   * @dev User accepted the match but ghosted and did not join
+   */
+  function userGhosted(address _user) public {
+    // TODO: Check that match also exists
+    if (accepted[_user][msg.sender]) {
+      users[_user].xp -= 50;
+    }
+  }
+
+  /**
+   * @dev User accepted the match and joined the chat
+   */
+  function userJoined(address _user) public {
+    // TODO: Check that match also exists
+    if (accepted[_user][msg.sender]) {
+      users[_user].xp += 100;
+    }
+  }
+
   function acceptMatch(address _user) public {
     if (accepted[_user][msg.sender]) {
       for (uint256 i = 0; i < matches.length; i++) {

@@ -1,46 +1,30 @@
 //https://github.com/privy-io/base-paymaster-example/
-import type {
-  UserOperationRequest,
-  UserOperationStruct,
-} from "@alchemy/aa-core";
-import {
-  toHex,
-  type Client,
-  encodeAbiParameters,
-  keccak256,
-  isHex,
-} from "viem";
-import {
-  BASE_GOERLI_ENTRYPOINT_ADDRESS,
-  PRE_VERIFICATION_GAS_BUFFER,
-  VERIFICATION_GAS_LIMIT_BUFFER,
-} from "./constants";
-import { baseGoerli } from "viem/chains";
-import type { AlchemyProvider } from "@alchemy/aa-alchemy";
+import type { UserOperationRequest, UserOperationStruct } from '@alchemy/aa-core'
+import { toHex, type Client, encodeAbiParameters, keccak256, isHex } from 'viem'
+import { BASE_GOERLI_ENTRYPOINT_ADDRESS, PRE_VERIFICATION_GAS_BUFFER, VERIFICATION_GAS_LIMIT_BUFFER } from './constants'
+import { baseGoerli } from 'viem/chains'
+import type { AlchemyProvider } from '@alchemy/aa-alchemy'
 
 /** Wraps an arbitrary object type to enforce that all values are hex-formatted strings */
 type AsHex<T> = {
-  [K in keyof T]: `0x${string}`;
-};
+  [K in keyof T]: `0x${string}`
+}
 
 /**
  * Helper function to convert an arbitrary value from a UserOperation (e.g. `nonce`) to a
  * hexadecimal string.
  */
-const formatAsHex = (
-  value: undefined | string | Uint8Array | bigint | number
-): `0x${string}` | undefined => {
+const formatAsHex = (value: undefined | string | Uint8Array | bigint | number): `0x${string}` | undefined => {
   if (value === undefined) {
-    return value;
-  } else if (typeof value === "string") {
-    if (!isHex(value))
-      throw new Error("Cannot convert a non-hex string to a hex string");
-    return value as `0x${string}`;
+    return value
+  } else if (typeof value === 'string') {
+    if (!isHex(value)) throw new Error('Cannot convert a non-hex string to a hex string')
+    return value as `0x${string}`
   } else {
     // Handles Uint8Array, bigint, and number
-    return toHex(value);
+    return toHex(value)
   }
-};
+}
 
 /**
  * Helper function to convert the fields of a user operation to hexadecimal strings.
@@ -48,9 +32,7 @@ const formatAsHex = (
  * @param userOp {UserOperationStruct}
  * @returns {AsHex<UserOperationStruct>} userOp with all fields transformed to hexstrings
  */
-const formatUserOpAsHex = (
-  userOp: UserOperationStruct
-): AsHex<UserOperationStruct> => {
+const formatUserOpAsHex = (userOp: UserOperationStruct): AsHex<UserOperationStruct> => {
   const {
     sender,
     nonce,
@@ -63,7 +45,7 @@ const formatUserOpAsHex = (
     maxPriorityFeePerGas,
     paymasterAndData,
     signature,
-  } = userOp;
+  } = userOp
 
   const formattedUserOp: AsHex<UserOperationStruct> = {
     sender: formatAsHex(sender)!,
@@ -77,10 +59,10 @@ const formatUserOpAsHex = (
     maxPriorityFeePerGas: formatAsHex(maxPriorityFeePerGas),
     paymasterAndData: formatAsHex(paymasterAndData)!,
     signature: formatAsHex(signature)!,
-  };
+  }
 
-  return formattedUserOp;
-};
+  return formattedUserOp
+}
 
 /**
  * Accepts an unsigned user operation, queries the Base Goerli paymaster, and populates
@@ -99,32 +81,26 @@ export const populateWithPaymaster = async (
   paymaster: Client
 ): Promise<UserOperationStruct> => {
   // Format every field in the user op to be a hexstring, to make type conversions easier later
-  const formattedUserOp: AsHex<UserOperationStruct> = formatUserOpAsHex(userOp);
+  const formattedUserOp: AsHex<UserOperationStruct> = formatUserOpAsHex(userOp)
 
   // First, increment the user op's `preVerificationGas` and `verificationGasLimit` with the
   // recommended gas buffers to cover verification of the Base Goerli paymaster
   const bufferedUserOp: AsHex<UserOperationStruct> = {
     ...formattedUserOp,
     preVerificationGas: formattedUserOp.preVerificationGas
-      ? toHex(
-        BigInt(formattedUserOp.preVerificationGas) +
-        PRE_VERIFICATION_GAS_BUFFER
-      )
+      ? toHex(BigInt(formattedUserOp.preVerificationGas) + PRE_VERIFICATION_GAS_BUFFER)
       : undefined,
     verificationGasLimit: formattedUserOp.verificationGasLimit
-      ? toHex(
-        BigInt(formattedUserOp.verificationGasLimit) +
-        VERIFICATION_GAS_LIMIT_BUFFER
-      )
+      ? toHex(BigInt(formattedUserOp.verificationGasLimit) + VERIFICATION_GAS_LIMIT_BUFFER)
       : undefined,
-  };
+  }
 
   // Then, query the Base Goerli paymaster with the user operation to determine if it will be sponsored
   try {
     const paymasterResponse: `0x${string}` = await paymaster.request({
       // eth_paymasterAndDataForUserOperation is a relatively new RPC and may throw a type error
       // @ts-ignore
-      method: "eth_paymasterAndDataForUserOperation",
+      method: 'eth_paymasterAndDataForUserOperation',
       params: [
         // @ts-ignore
         bufferedUserOp,
@@ -132,22 +108,22 @@ export const populateWithPaymaster = async (
         // @ts-ignore
         toHex(baseGoerli.id),
       ],
-    });
+    })
 
     // If the paymaster responds successfully, use the response as the user operation's
     // `paymasterAndData` field
     const populatedUserOp: AsHex<UserOperationStruct> = {
       ...bufferedUserOp,
       paymasterAndData: paymasterResponse,
-    };
+    }
 
-    return populatedUserOp;
+    return populatedUserOp
   } catch (error) {
     // If the paymaster responds with an error, it will not sponsor the user operation.
     // You might handle this differently, e.g. try a different paymaster
-    throw new Error(`${error}`);
+    throw new Error(`${error}`)
   }
-};
+}
 
 /**
  * Accepts an unsigned user operation and packs it. Used as part of the procedure required to
@@ -162,16 +138,16 @@ const packUserOp = (userOp: AsHex<UserOperationStruct>): `0x${string}` => {
   // address -> `0x${string}`, uint256 -> bigint, bytes32 -> `0x${string}`
   const packedUserOp = encodeAbiParameters(
     [
-      { name: "sender", type: "address" },
-      { name: "nonce", type: "uint256" },
-      { name: "initCode", type: "bytes32" },
-      { name: "callData", type: "bytes32" },
-      { name: "callGasLimit", type: "uint256" },
-      { name: "verificationGasLimit", type: "uint256" },
-      { name: "preVerificationGas", type: "uint256" },
-      { name: "maxFeePerGas", type: "uint256" },
-      { name: "maxPriorityFeePerGas", type: "uint256" },
-      { name: "paymasterAndData", type: "bytes32" },
+      { name: 'sender', type: 'address' },
+      { name: 'nonce', type: 'uint256' },
+      { name: 'initCode', type: 'bytes32' },
+      { name: 'callData', type: 'bytes32' },
+      { name: 'callGasLimit', type: 'uint256' },
+      { name: 'verificationGasLimit', type: 'uint256' },
+      { name: 'preVerificationGas', type: 'uint256' },
+      { name: 'maxFeePerGas', type: 'uint256' },
+      { name: 'maxPriorityFeePerGas', type: 'uint256' },
+      { name: 'paymasterAndData', type: 'bytes32' },
     ],
     [
       userOp.sender,
@@ -185,10 +161,10 @@ const packUserOp = (userOp: AsHex<UserOperationStruct>): `0x${string}` => {
       BigInt(userOp.maxPriorityFeePerGas!),
       keccak256(userOp.paymasterAndData),
     ]
-  );
+  )
 
-  return packedUserOp;
-};
+  return packedUserOp
+}
 
 /**
  * Accepts an unsigned user operation and computes its hash, by first packing it, and then re-encoding
@@ -199,26 +175,20 @@ const packUserOp = (userOp: AsHex<UserOperationStruct>): `0x${string}` => {
  * @param userOp {UserOperationStruct} unsigned user operation
  * @returns {`0x${string}`} hexadecimal string representing the user operation's hash
  */
-const computeUserOpHash = (
-  userOp: AsHex<UserOperationStruct>
-): `0x${string}` => {
-  const packedUserOp = packUserOp(userOp);
+const computeUserOpHash = (userOp: AsHex<UserOperationStruct>): `0x${string}` => {
+  const packedUserOp = packUserOp(userOp)
   // address -> `0x${string}`, uint256 -> bigint, bytes32 -> `0x${string}`
   const encodedUserOp = encodeAbiParameters(
     [
-      { name: "packed", type: "bytes32" },
-      { name: "entryPoint", type: "address" },
-      { name: "chainId", type: "uint256" },
+      { name: 'packed', type: 'bytes32' },
+      { name: 'entryPoint', type: 'address' },
+      { name: 'chainId', type: 'uint256' },
     ],
-    [
-      keccak256(packedUserOp),
-      BASE_GOERLI_ENTRYPOINT_ADDRESS,
-      BigInt(baseGoerli.id),
-    ]
-  );
-  const userOpHash = keccak256(encodedUserOp);
-  return userOpHash;
-};
+    [keccak256(packedUserOp), BASE_GOERLI_ENTRYPOINT_ADDRESS, BigInt(baseGoerli.id)]
+  )
+  const userOpHash = keccak256(encodedUserOp)
+  return userOpHash
+}
 
 /**
  * Accepts an unsigned user operation and computes its hash, and then signature, given the
@@ -235,17 +205,17 @@ export const signUserOp = async (
   provider: AlchemyProvider
 ): Promise<UserOperationRequest> => {
   // Format every field in the user op to be a hexstring, to make type conversions easier later
-  const formattedUserOp = formatUserOpAsHex(userOp);
+  const formattedUserOp = formatUserOpAsHex(userOp)
 
   // Compute hash and signature
-  const userOpHash = computeUserOpHash(formattedUserOp);
-  const signature = await provider.signMessage(userOpHash);
+  const userOpHash = computeUserOpHash(formattedUserOp)
+  const signature = await provider.signMessage(userOpHash)
 
   // @ts-ignore
   const signedUserOp: UserOperationRequest = {
     ...userOp,
     signature: signature,
-  };
+  }
 
-  return signedUserOp;
-};
+  return signedUserOp
+}

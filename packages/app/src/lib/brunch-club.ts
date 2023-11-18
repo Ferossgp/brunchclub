@@ -115,3 +115,27 @@ export function updateExpertise(from: string, expertise: string[]): RpcTransacti
     }),
   }
 }
+
+export function reportGhosted(from: string, address: string): RpcTransactionRequest {
+  return {
+    from: getAddress(from),
+    to: CONTRACT_ADDRESS,
+    data: encodeFunctionData({
+      abi: brunchClubABI,
+      functionName: 'userGhosted',
+      args: [getAddress(address)],
+    }),
+  }
+}
+
+export function reportJoined(from: string, address: string): RpcTransactionRequest {
+  return {
+    from: getAddress(from),
+    to: CONTRACT_ADDRESS,
+    data: encodeFunctionData({
+      abi: brunchClubABI,
+      functionName: 'userJoined',
+      args: [getAddress(address)],
+    }),
+  }
+}

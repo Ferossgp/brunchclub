@@ -54,7 +54,7 @@ export default function Home() {
       <div className='flex gap-4'>
         {data ? (
           data.map((profile) => {
-            return <RenderProfile profile={profile} />
+            return <RenderProfile profile={profile} key={profile.user} />
           })
         ) : (
           <span className='loading loading-spinner'></span>

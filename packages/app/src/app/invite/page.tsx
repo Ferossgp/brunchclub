@@ -6,17 +6,23 @@ import { useSmartAccount } from '@/context/Web3'
 import { CONTRACT_ADDRESS, acceptMatch, rejectMatch } from '@/lib/brunch-club'
 import { createPublicClient, http, zeroAddress } from 'viem'
 import { baseGoerli } from 'viem/chains'
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 export default function Component() {
   const { sendSponsoredUserOperation, smartAccountAddress, eoaClient } = useSmartAccount()
   const toAddress = zeroAddress
+  const queryClient = useQueryClient()
 
   const { mutate: onAcceptPress } = useMutation({
     mutationFn: async () => {
       if (!smartAccountAddress) return
 
       await sendSponsoredUserOperation(acceptMatch(smartAccountAddress, toAddress)).then(console.log)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: [{ entity: 'current-match', address: smartAccountAddress }],
+      })
     },
   })
 
@@ -25,6 +31,11 @@ export default function Component() {
       if (!smartAccountAddress) return
 
       await sendSponsoredUserOperation(rejectMatch(smartAccountAddress, toAddress)).then(console.log)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: [{ entity: 'current-match', address: smartAccountAddress }],
+      })
     },
   })
 
@@ -54,8 +65,7 @@ export default function Component() {
           address: CONTRACT_ADDRESS,
           abi: brunchClubABI,
           functionName: 'getUser',
-          // args: [matchAccount],
-          args: [smartAccountAddress],
+          args: [matchAccount],
         })
 
         if (user.user == zeroAddress) return null
@@ -84,12 +94,11 @@ export default function Component() {
         <p className='text-center'>{currentMatch.description}</p>
         <div className='flex flex-row gap-2'>
           {currentMatch.expertise?.map((expertise) => (
-            <Button key={expertise} variant="secondary" size="sm">
+            <Button key={expertise} variant='secondary' size='sm'>
               {expertise}
             </Button>
           ))}
         </div>
-
       </div>
       <div className='flex space-x-4 mt-8'>
         <button className='btn btn-wide btn-neutral' onClick={() => onRejectPress()}>

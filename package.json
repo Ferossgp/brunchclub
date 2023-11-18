@@ -14,5 +14,8 @@
   "dependencies": {
     "@pushprotocol/restapi": "^1.4.38",
     "@pushprotocol/socket": "^0.5.3"
+  },
+  "devDependencies": {
+    "eslint-plugin-prettier": "^5.0.1"
   }
 }

@@ -13,7 +13,7 @@ export function Connect() {
   })
 
   if (!ready) {
-    return <span className="loading loading-spinner"></span>
+    return <span className='loading loading-spinner'></span>
   }
 
   if (authenticated) {

@@ -12,7 +12,7 @@ export function Header() {
             <h1 className='text-lg font-bold'>{SITE_NAME}</h1>
           </LinkComponent>
         </div>
-        <div className="flex-none">
+        <div className='flex-none'>
           <Connect />
         </div>
       </header>

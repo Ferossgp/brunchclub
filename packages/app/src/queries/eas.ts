@@ -8,4 +8,5 @@ export const FETCH_ATTESTATIONS = gql`
       timeCreated
       revocationTime
     }
-  }`
+  }
+`

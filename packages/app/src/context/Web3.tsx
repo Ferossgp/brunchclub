@@ -167,7 +167,6 @@ export const SmartAccountProvider = ({ children }: { children: React.ReactNode }
     })
   }, [isRegistered, smartAccountAddress, eoaClient])
 
-
   return (
     <SmartAccountContext.Provider
       value={{
@@ -176,7 +175,6 @@ export const SmartAccountProvider = ({ children }: { children: React.ReactNode }
         smartAccountSigner: smartAccountSigner,
         smartAccountAddress: smartAccountAddress,
         sendSponsoredUserOperation: sendSponsoredUserOperation,
-        paymaster: paymaster,
         eoa: eoa,
         eoaClient: eoaClient,
       }}>

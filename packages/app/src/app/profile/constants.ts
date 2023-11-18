@@ -1,191 +1,191 @@
 export const OBJECTIVES = [
   {
-    title: "Brainstorm with peers"
+    title: 'Brainstorm with peers',
   },
   {
-    title: "Grow your team"
+    title: 'Grow your team',
   },
   {
-    title: "Start a company"
+    title: 'Start a company',
   },
   {
-    title: "Business development"
+    title: 'Business development',
   },
   {
-    title: "Explore new projects"
+    title: 'Explore new projects',
   },
   {
-    title: "Mentor others"
+    title: 'Mentor others',
   },
   {
-    title: "Organize events"
+    title: 'Organize events',
   },
   {
-    title: "Raise funding"
+    title: 'Raise funding',
   },
   {
-    title: "Find a cofounder"
+    title: 'Find a cofounder',
   },
   {
-    title: "Meet interesting people"
+    title: 'Meet interesting people',
   },
   {
-    title: "Explore new perspectives"
+    title: 'Explore new perspectives',
   },
   {
-    title: "Find a job"
-  }
+    title: 'Find a job',
+  },
 ]
 
 export const INTERESTS = [
   {
-    title: "entrepreneurship"
+    title: 'entrepreneurship',
   },
   {
-    title: "marketing"
+    title: 'marketing',
   },
   {
-    title: "consulting",
+    title: 'consulting',
   },
   {
-    title: "angel investing"
+    title: 'angel investing',
   },
   {
-    title: "crypto",
+    title: 'crypto',
   },
   {
-    title: "quant finance"
+    title: 'quant finance',
   },
   {
-    title: "venture capital"
+    title: 'venture capital',
   },
   {
-    title: "investment banking"
+    title: 'investment banking',
   },
   {
-    title: "economics"
+    title: 'economics',
   },
   {
-    title: "travel"
+    title: 'travel',
   },
   {
-    title: "fitness"
+    title: 'fitness',
   },
   {
-    title: "food"
+    title: 'food',
   },
   {
-    title: "dinner parties"
+    title: 'dinner parties',
   },
   {
-    title: "poker"
+    title: 'poker',
   },
   {
-    title: "parenting"
+    title: 'parenting',
   },
   {
-    title: "gaming"
+    title: 'gaming',
   },
   {
-    title: "writing"
+    title: 'writing',
   },
   {
-    title: "reading"
+    title: 'reading',
   },
   {
-    title: "chess"
+    title: 'chess',
   },
   {
-    title: "cooking"
+    title: 'cooking',
   },
   {
-    title: "wellness"
+    title: 'wellness',
   },
   {
-    title: "ai"
+    title: 'ai',
   },
   {
-    title: "biohacking"
+    title: 'biohacking',
   },
   {
-    title: "machine learning"
+    title: 'machine learning',
   },
   {
-    title: "product design"
+    title: 'product design',
   },
   {
-    title: "programming languages"
+    title: 'programming languages',
   },
   {
-    title: "robotics"
+    title: 'robotics',
   },
   {
-    title: "fintech"
+    title: 'fintech',
   },
   {
-    title: "data science"
+    title: 'data science',
   },
   {
-    title: "life sciences"
+    title: 'life sciences',
   },
   {
-    title: "visual design"
+    title: 'visual design',
   },
   {
-    title: "social impact"
+    title: 'social impact',
   },
   {
-    title: "diversity and inclusion"
+    title: 'diversity and inclusion',
   },
   {
-    title: "education"
+    title: 'education',
   },
   {
-    title: "sustainability"
+    title: 'sustainability',
   },
   {
-    title: "volunteering"
+    title: 'volunteering',
   },
   {
-    title: "philanthropy"
+    title: 'philanthropy',
   },
   {
-    title: "human rights"
+    title: 'human rights',
   },
   {
-    title: "photography"
+    title: 'photography',
   },
   {
-    title: "music"
+    title: 'music',
   },
   {
-    title: "sports"
+    title: 'sports',
   },
   {
-    title: "film"
+    title: 'film',
   },
   {
-    title: "entertainment"
+    title: 'entertainment',
   },
   {
-    title: "media"
+    title: 'media',
   },
   {
-    title: "electronic music"
+    title: 'electronic music',
   },
   {
-    title: "cinematography"
+    title: 'cinematography',
   },
   {
-    title: "fishing"
+    title: 'fishing',
   },
   {
-    title: "skiing"
+    title: 'skiing',
   },
   {
-    title: "fashion"
+    title: 'fashion',
   },
   {
-    title: "running"
-  }
+    title: 'running',
+  },
 ]

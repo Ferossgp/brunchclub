@@ -2,11 +2,12 @@
 import { useSmartAccount } from '@/context/Web3'
 import { ChatUIProvider, ChatView, MODAL_POSITION_TYPE } from '@pushprotocol/uiweb'
 import { viemSignerType } from '@pushprotocol/restapi'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation } from '@tanstack/react-query'
 import { createPublicClient, getAddress, http } from 'viem'
 import { baseGoerli } from 'viem/chains'
-import { CONTRACT_ADDRESS } from '@/lib/brunch-club'
+import { CONTRACT_ADDRESS, reportGhosted, reportJoined } from '@/lib/brunch-club'
 import { brunchClubABI } from '@/abis'
+import { useLocalStorage } from 'usehooks-ts'
 
 export default function PChat({ params }: { params: { slug: string } }) {
   const { data, isLoading } = useQuery({
@@ -40,19 +41,47 @@ export default function PChat({ params }: { params: { slug: string } }) {
       <div className='grid grid-cols-12 gap-4'>
         <div style={{ height: '75vh' }} className='col-span-9'>
           <ChatUIProvider signer={eoaClient as viemSignerType}>
-            <ChatView chatId={data?.eoa} />
+            <ChatView chatId={data.eoa} />
           </ChatUIProvider>
         </div>
         <div className='col-span-3 space-y-2'>
-          <ConfirmMatch />
-          <EndorseSkill tag='programming' />
+          <ConfirmMatch address={data.user} />
+          <EndorseSkill address={data.user} tag='programming' />
         </div>
       </div>
     </>
   )
 }
 
-const ConfirmMatch = () => {
+const ConfirmMatch: React.FC<{
+  address: string
+}> = ({ address }) => {
+  // TODO: check onchain status
+  const [reported, setReported] = useLocalStorage(`ghost-report-${address}`, false)
+
+  const { sendSponsoredUserOperation, smartAccountAddress } = useSmartAccount()
+  const { mutate: onReportGhosted } = useMutation({
+    mutationFn: async () => {
+      if (!smartAccountAddress) return
+
+      await sendSponsoredUserOperation(reportGhosted(smartAccountAddress, address)).then(console.log)
+
+      setReported(true)
+    },
+  })
+
+  const { mutate: onReportJoined } = useMutation({
+    mutationFn: async () => {
+      if (!smartAccountAddress) return
+
+      await sendSponsoredUserOperation(reportJoined(smartAccountAddress, address)).then(console.log)
+
+      setReported(true)
+    },
+  })
+
+  if (reported) return null
+
   return (
     <div>
       <div className='card w-full bg-primary text-primary-content'>
@@ -60,8 +89,12 @@ const ConfirmMatch = () => {
           <h2 className='card-title'>Did you met?</h2>
           <p>Let us know if your match ghosted you!</p>
           <div className='card-actions pt-2'>
-            <button className='btn btn-neutral flex-1'>Ghosted...</button>
-            <button className='btn flex-1'>We MET!</button>
+            <button className='btn btn-neutral flex-1' onClick={() => onReportGhosted()}>
+              Ghosted...
+            </button>
+            <button className='btn flex-1' onClick={() => onReportJoined()}>
+              We MET!
+            </button>
           </div>
         </div>
       </div>
@@ -70,8 +103,24 @@ const ConfirmMatch = () => {
 }
 
 const EndorseSkill: React.FC<{
+  address: string
   tag: string
-}> = ({ tag }) => {
+}> = ({ tag, address }) => {
+  const [endorsed, setEndorsed] = useLocalStorage(`endorsed-${address}`, false)
+  const { sendSponsoredUserOperation, smartAccountAddress } = useSmartAccount()
+
+  const { mutate: onEndorse } = useMutation({
+    mutationFn: async () => {
+      if (!smartAccountAddress) return
+
+      throw new Error('Not implemented')
+
+      setEndorsed(true)
+    },
+  })
+
+  if (endorsed) return null
+
   return (
     <div className='col-span-3'>
       <div className='card w-full bg-primary text-primary-content'>
@@ -79,8 +128,12 @@ const EndorseSkill: React.FC<{
           <h2 className='card-title uppercase'>{tag}</h2>
           <p>Would you like to endorse {tag} skill?</p>
           <div className='card-actions pt-2'>
-            <button className='btn btn-neutral flex-1'>Skip</button>
-            <button className='btn flex-1'>Endorse!</button>
+            <button className='btn btn-neutral flex-1' onClick={() => setEndorsed(true)}>
+              Skip
+            </button>
+            <button className='btn flex-1' onClick={() => onEndorse()}>
+              Endorse!
+            </button>
           </div>
         </div>
       </div>

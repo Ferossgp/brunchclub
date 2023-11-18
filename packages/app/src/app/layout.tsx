@@ -5,7 +5,7 @@ import { Layout } from '@/components/Layout'
 import { SmartAccountProvider } from '@/context/Web3'
 import '../globals.css'
 import { SafeHydrate } from '@/components/safe-hydrate'
-import { PrivyClientProvider } from '@/context/privy';
+import { PrivyClientProvider } from '@/context/privy'
 import { ReactQueryProvider } from '@/context/react-query'
 
 export const metadata: Metadata = {
@@ -14,12 +14,11 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout(props: PropsWithChildren) {
-
   return (
     <html lang='en'>
       <body>
         <SafeHydrate>
-          <ReactQueryProvider >
+          <ReactQueryProvider>
             <PrivyClientProvider>
               <SmartAccountProvider>
                 <Layout>{props.children}</Layout>
