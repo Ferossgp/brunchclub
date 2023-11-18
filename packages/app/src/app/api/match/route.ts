@@ -31,7 +31,8 @@ async function getAvaliableUsers() {
 
   console.log(matches)
 
-  const freeUsers = []
+  const freeUsers = ['0x109282750F1030941e81b6c2551E7B1157A24EaB', '0xF696C6Ac5062029920f3De530eA39dBDe5cD5e80']
+
   for (const user of allUsers) {
     let avaliable = true
     for (const match of matches) {
@@ -101,9 +102,10 @@ async function makeAttestation(from: string, to: string, tag: string) {
 }
 
 async function makeRandomMatches() {
-  const freeUsers = await getAvaliableUsers()
+  //const freeUsers = await getAvaliableUsers()
 
   // const freeUsers = ['0x109282750F1030941e81b6c2551E7B1157A24EaB', '0x29369c3E2d9EC68f6f900C27de3eFb161133Cde7']
+  const freeUsers = ['0x109282750F1030941e81b6c2551E7B1157A24EaB', '0xF696C6Ac5062029920f3De530eA39dBDe5cD5e80']
 
   console.log(freeUsers)
 
@@ -117,13 +119,13 @@ async function makeRandomMatches() {
 }
 
 export async function GET() {
-  // await makeRandomMatches()
+  await makeRandomMatches()
 
-  await makeAttestation(
-    '0x5c9Ec83A02771C338B22cA59a9097C4a145dBBFA',
-    '0x109282750F1030941e81b6c2551E7B1157A24EaB',
-    'test'
-  )
+  // await makeAttestation(
+  //   '0x5c9Ec83A02771C338B22cA59a9097C4a145dBBFA',
+  //   '0x109282750F1030941e81b6c2551E7B1157A24EaB',
+  //   'test'
+  // )
 
   return Response.json({ data: 'World!' })
 }
